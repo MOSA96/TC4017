@@ -1,27 +1,51 @@
+"""
+Tests for convert_numbers.py
+"""
+
 import pytest
 
-from convertNumbers import (
+from convert_numbers import (
     file_to_list,
     numbers_to_binary,
     numbers_to_hexadecimal,
     arrays_to_file,
 )
 
+
 def test_numbers_to_binary_zero():
+    """
+    Checks correct output to binary for 0.
+    """
     assert numbers_to_binary([0]) == ["0"]
 
 def test_numbers_to_hexadecimal_zero():
+    """
+    Checks correct output to hexadecimal for 0.
+    """
     assert numbers_to_hexadecimal([0]) == ["0"]
 
 def test_numbers_to_binary_negative_numbers():
+    """
+    Checks correct output to binary for negative numbers.
+    """
     # -5 -> -101, -1 -> -1, -2 -> -10
     assert numbers_to_binary([-5, -1, -2]) == ["-101", "-1", "-10"]
 
 def test_numbers_to_hexadecimal_negative_numbers():
+    """
+    Checks correct output to hexadecimal for negative numbers.
+    """
     # -26 -> -1a, -15 -> -f
     assert numbers_to_hexadecimal([-26, -15]) == ["-1a", "-f"]
 
 def test_file_to_list_invalid_and_empty_lines(tmp_path, capsys):
+    """
+    Verifies correctness of invalidad data.
+    Verifies error capture.
+    
+    :param tmp_path: Temporary file path for testing.
+    :param capsys: Fixture to capture output
+    """
     p = tmp_path / "input.txt"
     # includes: valid int, invalid token, empty line, whitespace, valid negative
     p.write_text("10\nabc\n\n   \n-3\n", encoding="utf-8")
@@ -38,17 +62,29 @@ def test_file_to_list_invalid_and_empty_lines(tmp_path, capsys):
 
 
 def test_converters_pass_through_nan_for_non_ints():
+    """
+    Verifies correct transformation of data.
+    """
     data = [3, "nan", 0, None, -2]
     assert numbers_to_binary(data) == ["11", "nan", "0", "nan", "-10"]
     assert numbers_to_hexadecimal(data) == ["3", "nan", "0", "nan", "-2"]
 
 
 def test_file_to_list_missing_file_raises():
+    """
+    Verifies correct error on unexistant file.
+    """
     with pytest.raises(FileNotFoundError):
         file_to_list("this_file_should_not_exist_12345.txt")
 
 
 def test_arrays_to_file_creates_output_file(tmp_path, monkeypatch):
+    """
+    Verifies correct writting to file.
+    
+    :param tmp_path:  Temporary file path for testing.
+    :param monkeypatch: Fixture to mock file path.
+    """
 
     monkeypatch.chdir(tmp_path)
 
@@ -68,6 +104,12 @@ def test_arrays_to_file_creates_output_file(tmp_path, monkeypatch):
 
 
 def test_full_pipeline_file_to_output(tmp_path, monkeypatch):
+    """
+    Test complete pipeline.
+    
+    :param tmp_path:  Temporary file path for testing.
+    :param monkeypatch: Fixture to mock file path.
+    """
     monkeypatch.chdir(tmp_path)
 
     inp = tmp_path / "nums.txt"

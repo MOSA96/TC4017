@@ -1,9 +1,17 @@
+"""Script that converts decimals to binary and hexadecimal."""
+
 import argparse
 import time
 
 def initilize_parser():
+    """
+    Initializes argparser to accept params in file execution.
+
+    file: number of the file.
+    
+    """
     parser = argparse.ArgumentParser(
-        prog='Converter',
+        prog='convert_numbers',
         description='Converts file numbers to binary and hexadecimal base'
     )
 
@@ -13,6 +21,14 @@ def initilize_parser():
 
 
 def file_to_list(file_path: str):
+    """
+    Returns list of numbers in file, replacing invalid lines with 'nan'.
+
+    :param file_path: file route
+    :type file_path: str
+    :return: (numbers_list, invalid_count)
+    :rtype: tuple[list, int]
+    """
     lines_list = []
     invalid_count = 0
 
@@ -28,7 +44,7 @@ def file_to_list(file_path: str):
                 continue
 
             try:
-                lines_list.append(int(s)) 
+                lines_list.append(int(s))
             except ValueError:
                 print(f"[ERROR] Line {line_no}: invalid integer '{raw}' -> treated as nan")
                 lines_list.append('nan')
@@ -38,6 +54,14 @@ def file_to_list(file_path: str):
 
 
 def numbers_to_binary(numbers_to_convert: list) -> list[str]:
+    """
+    Converts list of numbers to binary
+    
+    :param numbers_to_convert: list of numbers
+    :type numbers_to_convert: list
+    :return: list of numbers in binary
+    :rtype: list[str]
+    """
     binary_arr = []
     for i in numbers_to_convert:
         if not isinstance(i, int):
@@ -63,6 +87,14 @@ def numbers_to_binary(numbers_to_convert: list) -> list[str]:
 
 
 def numbers_to_hexadecimal(numbers_to_convert: list) -> list[str]:
+    """
+    Converts list of numbers to hexadecimal
+    
+    :param numbers_to_convert: Description
+    :type numbers_to_convert: list
+    :return: Description
+    :rtype: list[str]
+    """
     hexadecimal_arr = []
     hex_chars = '0123456789abcdef'
 
@@ -90,7 +122,26 @@ def numbers_to_hexadecimal(numbers_to_convert: list) -> list[str]:
     return hexadecimal_arr
 
 
-def arrays_to_file(original_arr: list, decimal_arr: list, hexadecimal_arr: list, time_elapsed: float, invalid_count: int):
+def arrays_to_file(original_arr: list,
+                   decimal_arr: list,
+                   hexadecimal_arr: list,
+                   time_elapsed: float,
+                   invalid_count: int):
+    """
+    Uses list of numbers to write to file with format.
+    
+    :param original_arr: Description
+    :type original_arr: list
+    :param decimal_arr: Description
+    :type decimal_arr: list
+    :param hexadecimal_arr: Description
+    :type hexadecimal_arr: list
+    :param time_elapsed: Description
+    :type time_elapsed: float
+    :param invalid_count: Description
+    :type invalid_count: int
+    """
+
     results = zip(original_arr, decimal_arr, hexadecimal_arr)
 
     with open("ConversionResults.txt", "w", encoding="utf-8") as f:
@@ -105,6 +156,15 @@ def arrays_to_file(original_arr: list, decimal_arr: list, hexadecimal_arr: list,
 
 
 def main():
+    """
+    Program entry point.
+
+    Parses command-line arguments to get an input file path, reads numeric values
+    from the file, converts the valid numbers to binary and hexadecimal
+    representations, measures total runtime, writes the original and converted
+    arrays (plus timing and invalid-line count) to an output file, and prints a
+    summary to the consol
+    """
     start = time.time()
 
     args = initilize_parser()
