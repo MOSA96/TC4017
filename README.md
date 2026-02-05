@@ -49,5 +49,6 @@ uv run python scripts/example.py
 Run tests:
 
 ```bash
-uv run pytest <test_script>
+uv run pytest scripts/test_example.py
 ```
+
